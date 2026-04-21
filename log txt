@@ -1,0 +1,6 @@
+4/12 4:40 pm
+The game asks for the name of the users, gets a phrase from the phrases.txt, handle wheel spins, and handle guess for consonants
+I added logic for player to guess a consonant in the phrase. It adds the appropriate score and replaces the str that hold
+blank characters. 
+I need to add logic for purchasing vowels, guessing the phrase. And some over code improvements. 
+

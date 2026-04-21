@@ -1,0 +1,3 @@
+https://docs.python.org/3/library/random.html
+https://wheeloffortuneanswer.com/#google_vignette
+w3school
