@@ -8,6 +8,7 @@ def main():
     WheelOFfortune = wheelOFfortune.wheelOfFortuneGame()
     WheelOFfortune.printGameRules()
     # WheelOFfortune.getPlayerNames()
+    WheelOFfortune.getLengthOfPhraseFile()
     WheelOFfortune.getPhraseForRound()
 
 
