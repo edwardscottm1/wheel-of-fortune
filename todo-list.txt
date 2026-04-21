@@ -3,6 +3,12 @@ Wheel of fortune
 2. Get user names                               done
 3. Implement logic to get phrase with category        done
 4. Implement game loop, wheel spin, guess word, scoring
+    Add logic to spin wheel
+    Handle user guess consonant
+    Handle user buying a vowel
+    Handle user guessing phrase
+    Keep track of scores during round
+    Maybe add skip turn and stuff
 5. Add loop to ask users if they wish to keep playing 
 6. Add feature to play alone?
 7. Clean up code and make output nicer
