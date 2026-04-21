@@ -1,0 +1,8 @@
+Wheel of fortune
+1. set up class                                 done
+2. Get user names                               done
+3. Implement logic to get phrase with category
+4. Implement game loop, wheel spin, guess word, scoring
+5. Add loop to ask users if they wish to keep playing 
+6. Add feature to play alone?
+7. Clean up code and make output nicer
