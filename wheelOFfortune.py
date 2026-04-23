@@ -13,7 +13,8 @@ class wheelOfFortuneGame:
     def __init__(self):
         
         self.__phraseForRound = {'category': '', 'phrase': []}
-        self.__phraseAsBlankChars = ['■' * len(word) for word in self.__phraseForRound['phrase']]
+        self.__phraseAsBlankChars = []
+        # ['■' * len(word) for word in self.__phraseForRound['phrase']]
         self.__vowelsInPhrase = []
         self.__scores = [ # placeholder values THIS NEED TO BE SET TO NOTHING WHEN DONE
             {'user':'Edward', 'money': 1000},
@@ -23,33 +24,35 @@ class wheelOfFortuneGame:
         self.__numberOfLines = 0
         self.__wheelValues = []
 
-    # Print the game rules and title, NOT COMPLETE
+    # Method used to print the game rules and title, NOT COMPLETE
     def printGameRules(self):
         print('=' * self.BORDER_LENGTH)
         print('Wheel of Fortune'.center(self.BORDER_LENGTH))
         print('=' * self.BORDER_LENGTH)
     
-    # Get names of players
+    # Method used to get names of players
     def getPlayerNames(self):
         print('Please enter the names for the players playing')
         for i in range(3):
             self.__scores[i]['user'] = input(f'Player {i + 1} name\n{self.INPUT_FIELD}')
         print('Okay contestants, let\'s play our first round')
     
-    # Get length of phrases file, this is done to allow users to add more phrases to the file 
-    # and have program no crash
+    # Method used to get length of phrases file, this is done to allow users to add more phrases to the file (if they want to) 
+    # and have program not crash
     def getLengthOfPhraseFile(self):
         with open('phrases.txt', 'r') as phrasesFile:
             # List comprehension, we go over each line in the file and get a value of 1, to get the 
             # number of lines in the file
             self.__numberOfLines = sum([1 for line in phrasesFile])
                     
-    # Get a random phrase from the phrases file
+    # Method used to get a random phrase from the phrases file
     def getPhraseForRound(self):
+        # Get a random integer, this will be the random line in the file
         randomLine = random.randint(1, self.__numberOfLines)
         
         # Variable to store phrase 
         phrase = ''
+        # Read the file 
         with open('phrases.txt', 'r') as phrasesFile:
             for i in range(randomLine):
                 phrase = phrasesFile.readline()
@@ -61,16 +64,20 @@ class wheelOfFortuneGame:
         self.__phraseForRound['category'] = phrase[0]
         self.__phraseForRound['phrase'] = phrase[1].upper()
 
-        # Make a version of the phrase as blank chars to show to players during the game     
+        # Make a version of the phrase as blank characters to show to players during the game    
+        # Each word becomes a row of equal signs 
         self.__phraseAsBlankChars = ['=' * len(word) for word in self.__phraseForRound['phrase'].split()]
 
-        # This is used to keep track of vowels in the phrase. This is used to keep track of when players bought every vowel
+        # This is used to keep track of vowels in the phrase. 
+        # Used to check when players bought every vowel
+        # First we loop through the vowels in the VOWELS constant tuple
         for vowel in self.VOWELS:
-            # print(self.__phraseForRound['phrase'])
+            # If the word contains the vowel, we append the vowel to the __vowelsInPhrase attribute
             if vowel in self.__phraseForRound['phrase']:
                 self.__vowelsInPhrase.append(vowel)
-        print(self.__vowelsInPhrase)
+        # print(self.__vowelsInPhrase)
 
+    # Method used to print the scores from each player
     def displayScores(self):
         print('\nCurrent Score')
         for i in range(len(self.__scores)):
@@ -80,83 +87,90 @@ class wheelOfFortuneGame:
             print(f'${self.__scores[i]['money']:^10.2f}\t', end = '')
         print()
 
-    # Used to play logic of wheel of fortune game
+    # Method used to play a round of wheel of fortune 
     def playRound(self):
+        # Print a introductory message
         print(f'The category for this round is: {self.__phraseForRound['category']}')
 
+        # Generate the values for the wheel
         self.generateValuesForWheel()
+        self.printListInLine(self.__wheelValues, 'The values on the wheel are')
 
+        # Sentinel variable used to keep round going till the phrase is solved
         phraseGuessed = False
         # Loop to play game, each player takes turn to spin wheel and guess the letters of the phrase
         while not phraseGuessed:
+            # Create sets to store consonant and vowels guessed/purchased
             guessedConsonants = set()
             purchasedVowels = set()
+            # Loop through __scores object, to let each player play
             for i in range(len(self.__scores)):
+                # Sentinel variable used to keep track if a player's turn is over
+                # It ends when they guess a consonant, vowel or the phrase wrong
                 turnOver = False
                 while not turnOver:
+                    # At start of each turn print the money each player has
                     self.displayScores()
-
+                    # Show the current phrase as blank characters, to user
+                    # This gets filled in with letters as the players guess the letters
                     print('\nHere is your phrase')
                     print(' '.join(self.__phraseAsBlankChars))
                     
+                    # Show the guessed consonants and bought vowels
                     self.printListInLine(guessedConsonants, 'Guessed Consonants')
                     self.printListInLine(purchasedVowels, 'Purchased Vowels')
                     
-
+                    # Let user spin the wheel
                     print(f'\n{self.__scores[i]['user']} it is your turn, press enter to spin the wheel!')
                     input(self.INPUT_FIELD)
                     landedValue = self.spinWheel(self.__wheelValues)
                     print(f'\nYou landed on ${landedValue}\n')
 
-                    # Ensure input is valid
-                    inputValid = False
-                    while not inputValid:
-                        try:
-                            print('Choose from the options below:')
-                            print('1. Guess a consonant')
-                            print('2. Buy a vowel')
-                            print('3. Guess the phrase\n')
-                            userInput = int(input(self.INPUT_FIELD))
-                            if userInput > 0 and userInput < 4:
-                                inputValid = True
-                            else:
-                                print('\nPlease enter a valid option')
-                        except ValueError:
-                            print('\nPlease enter a valid option')
-                    print()
+                    # Ask user on what they would like to do
+                    userInput = self.handleMenuSelection(['Guess consonant', 'Guess the phrase', 'Buy a vowel'])
 
+                    # Call the appropriate method based on user input
+                    # The turnOver variable will gets a new boolean value to determine if the players
+                    # turn is over or not
                     if userInput == 1:
                         turnOver = self.playerGuessesConsonant(landedValue, guessedConsonants, player = i)
-                    elif userInput == 2:
+                    elif userInput == 3:
                         turnOver = self.playerBuysVowel(landedValue, purchasedVowels, guessedConsonants, player = i)
                        
 
-
+    # Method used to handle user wanting to guess a consonant in the phrase
     def playerGuessesConsonant(self, landedValue, guessedConsonants, player):
-        print(f'Phrase:\n{' '.join(self.__phraseAsBlankChars)}')
+        # Print the phrase and the guesses consonants
+        print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
         self.printListInLine(guessedConsonants, 'Guessed Consonants')
+        
+        # Ask user to enter a consonant
         validInput = False
         while not validInput:
-            userInput = input(f'\nGuess a consonant in the phrase\n{self.INPUT_FIELD}').upper()
+            userInput = input(f'\nGuess a consonant in the phrase\n{self.INPUT_FIELD}').upper().rstrip()
+            # Check to see if user entered nothing, if not they are prompted to enter a letter again
             if userInput in self.VOWELS or userInput ==' ' or userInput == '':
                 validInput = False
                 print('Please enter a consonant\n')
                 continue
             validInput = True
         else:
+            # We need to check that they entered a character that, if it is their turn ends
             if userInput in guessedConsonants:
                 print(f'\nSorry, "{userInput}" was already guessed, you turn has ended.')
                 
                 time.sleep(1)
                 return True
 
-        # keep track of constants guessed
+        # Keep track of constants guessed
         guessedConsonants.add(userInput)
 
-        # Check to see how many consonants in the phrase
+        # Check to see how many instances of the user entered consonant is in the phrase
         num = self.checkForCharInPhrase(self.__phraseForRound['phrase'], userInput)
         
-            
+        # Based on the number of instances of the consonant, print an appropriate message
+        # If the consonant is in the phrase, we need to update the list that stores the phrase
+        # with blank characters
         if num > 1:
             print(f'\nThere are {num} {userInput}s!')
             self.replaceBlankStrWithChars(userInput)
@@ -169,59 +183,71 @@ class wheelOfFortuneGame:
             time.sleep(1)
             return True
             
-        # Add score
+        # Add user score
+        # This depends on the number of instance of the letter times the number the user landed on with the wheel
         print(f'Money earned: {num * landedValue}')
         self.__scores[player]['money'] += num * landedValue
         time.sleep(1)
+        # Return false to allow user to spin again since they guesses correctly
         return False
 
-# what happens if user buys a vowel that is not in the word
-# cost of vowel
-# keep track of vowels
-# can user guess a consonant if they bought a vowel
-
+    # Method used to allow user to purchase a vowel
     def playerBuysVowel(self, landedValue, purchasedVowels, guessedConsonants, player):
+        # Cost of a vowel
         VOWEL_COST = 250
-        
 
+        # Sentinel variable to allow user purchase another vowel
+        # Loop till user does not want to buy another vowel, or they cannot buy another one
         buyAnother = 'Y'
-
         while buyAnother == 'Y':
-            print(f'Your balance: {self.__scores[player]['money']}\t\t Cost of vowel: {VOWEL_COST}')
-            if self.__scores[player]['money'] < VOWEL_COST:
+            # Print user their balance and the cost of a vowel
+            print(f'\nYour balance: {self.__scores[player]['money']}\t\t Cost of vowel: {VOWEL_COST}')
+            # First check if user has enough money to buy a vowel
+            if self.__scores[player]['money'] <= VOWEL_COST:
                 print('Sorry, you don\'t have enough money to buy a vowel')
                 time.sleep(1)
-                break
+                break # stop the loop
 
+            # Print the phrase with blank characters and the purchases vowels
             print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
             self.printListInLine(purchasedVowels, 'Purchased Vowels')
 
+            # Ask user to enter a vowel
             validInput = False
-            userInput = ''
+            # Loop till user enters a valid input
             while not validInput:
-                userInput = input(f'\nWhich vowel would you like to buy?\n{self.INPUT_FIELD}').upper()
+                userInput = input(f'\nWhich vowel would you like to buy?\n{self.INPUT_FIELD}').upper().rstrip()
+                # Check if user entered nothing or if they entered a consonant
+                # If so the user needs to enter a vowel to continue
                 if userInput in self.CONSONANTS or userInput == ' ' or userInput == '':
                     validInput = False
                     print('Please buy a vowel!\n')
                     continue
+                # If input valid, set sentinel variable to true
                 validInput = True
             else:
+                # After player enters a vowel, we check to see if the vowel was bought already 
+                # If it was, their turn is over
                 if userInput in purchasedVowels:
                     print(f'\nSorry, "{userInput}" was already purchases, you turn has ended.')
                     time.sleep(1)
                     return True
             
 
-
+            # Keep track of vowels purchases
             purchasedVowels.add(userInput)
+
+            # Subtract cost of vowel to player's balance
             self.__scores[player]['money'] -= VOWEL_COST 
+
             # Check to see how many of the purchased vowel are in the phrase
             num = self.checkForCharInPhrase(self.__phraseForRound['phrase'], userInput)
             
-            
+            # Display appropriate message based on number of vowels in the phrase
             if num == 0:
                 print(f'Sorry there is no "{userInput}" in the phrase. Your turn ends')
                 time.sleep(1)
+                # Exit the function, when player buys a vowel not in the phrase, their turn ends
                 return True
             elif num > 1: 
                 print(f'\nThere are {num} "{userInput}" in the phrase')
@@ -234,80 +260,112 @@ class wheelOfFortuneGame:
                 print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
                 time.sleep(1)
 
-            # Once all the vowels have been bought, we inform players of it
+            # We remove the vowel from this list to keep track of vowels not revealed yet
             self.__vowelsInPhrase.remove(userInput)
             print(self.__vowelsInPhrase)
+            # Once all the vowels have been bought, we inform players of it
             if len(self.__vowelsInPhrase) == 0:
                 print('No more vowels left to buy!\n')
                 time.sleep(1)
                 break
 
-
+            # Ask user if they would like to buy another vowel
             print(f'\nYour balance: {self.__scores[player]['money']}')
             buyAnother = input(f'\nWould you like to buy another vowel? (Y?)\n{self.INPUT_FIELD}').upper()
             print()
 
+        # Once user does not want to buy another vowel or no more vowels available to buy, they can either guess a consonant or the phrase
         # Ensure input is valid
-        inputValid = False
-        while not inputValid:
-            try:
-                print('Choose from the options below:\n1. Guess a consonant\n2. Guess the phrase\n')
-                userInput = int(input(self.INPUT_FIELD))
-                if userInput > 0 and userInput < 2:
-                    inputValid = True
-                else:
-                    print('\nPlease enter a valid option')
-            except ValueError:
-                print('\nPlease enter a valid option')
-        print()
+        userInput = self.handleMenuSelection(['Guess a consonant', 'Guess the phrase'])
         if userInput == 1:
-
             return self.playerGuessesConsonant(landedValue, guessedConsonants, player)
+        elif userInput == 2:
+            pass
         
-
-
-
             
-
-            
-    # Generates values for the wheel
+    # Method used to generates values for the wheel for the round
     def generateValuesForWheel(self):
         self.__wheelValues = random.choices(range(100, 1500, 100), k = 10)
 
-    # Spin the wheel 
+    # Method used to spin the wheel, takes a list of values
     def spinWheel(self, values):
+        # From the passes list, we randomly choose one
         landedValue = random.choice(values)
 
-        # Animation for spinning wheel
+        # Characters for animation for spinning wheel
         spinWheelChars = ['|', '/', '-', '\\', '|', '/', '-', '\\']
+
+        # This loop is used to show the animation of a wheel spinning
         for i in range (2):
             for k in range (len(spinWheelChars)):
+                # Pause execution to allow user to see characters changing
                 time.sleep(.1)
                 print('Spinning wheel', spinWheelChars[k], end='\r')
         print()
+        # Return the value that the wheel landed on
         return landedValue
     
+    # Method used to check if a character entered by the player is in the phrase
+    # It returns an int of how many instances of the character is in the phrase
     def checkForCharInPhrase(self, phrase, char):
         num = 0
         for word in phrase:
             num += word.count(char)
         return num
         
+    # Method used to replace blank characters in phrase to correct guessed/purchases characters
     def replaceBlankStrWithChars(self, userInput):
-        index = 0
+        # Variable used to keep track of the words index in the __phraseAsBlankChars list
+        wordIndex = 0
+    
+        # Loop through each word in the phrase for the round
         for word in self.__phraseForRound['phrase'].split():
-            indexOfChar = -1
+            # Variable used to keep track of the current characters index
+            charIndex = 0
+            # Loop through every character in the word
             for char in word:
-                indexOfChar += 1
+                
+                
+                # If the character equals the character the user entered, we replace the blank character in __phraseAsBlankChars
+                # with the appropriate letter
                 if char == userInput:    
-                    self.__phraseAsBlankChars[index] = self.__phraseAsBlankChars[index][:indexOfChar] + userInput + self.__phraseAsBlankChars[index][indexOfChar + 1:] 
-            #print(self.__phraseAsBlankChars)
-            index +=1
+                    # In order to replace the character, we slice the string. 
+                    # First we slice the string from the start to the character before the one that needs to be replaced
+                    # Then we concatenate the letter the user entered to the first slice
+                    # Then slice the original string to get the rest of the string and concatenate it to the previous strings
+                    self.__phraseAsBlankChars[wordIndex] = self.__phraseAsBlankChars[wordIndex][:charIndex] + userInput + self.__phraseAsBlankChars[wordIndex][charIndex + 1:]
+                
+                # Increment the variable
+                charIndex += 1
+            wordIndex += 1
 
+    # Method used to print a list/set in a row
     def printListInLine(self, list, title):
             print(f'\n{title}:')
             for word in list:
                 print(f'{word}\t', end = '')
             print()
+
+    # Method that takes a list as an argument to generate a menu selection screen
+    # This method handles invalid inputs also
     def handleMenuSelection(self, options):
-        pass
+        # Ensure input is valid
+        inputValid = False
+        while not inputValid:
+            try:
+                # Print the menu of options
+                print('Choose from the options below:')
+                for i in range(len(options)):
+                    print(f'{i + 1}. {options[i]}')
+                    
+                userInput = int(input(self.INPUT_FIELD))
+                # Check to see number entered is in range
+                if userInput > 0 and userInput <= len(options):
+                    inputValid = True
+                    return userInput
+                else:
+                    print('\nPlease enter a valid option')
+            # In case user enters anything other than a int
+            except ValueError:
+                print('\nPlease enter a valid option')
+        
