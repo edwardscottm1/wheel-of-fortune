@@ -1,3 +1,9 @@
+4/23 2PM
+Added method to handle logic for user solving the phrase. The round will end once the players can solve the puzzle
+I need to add logic to track the points. Currently money earned in a round goes to the next round.
+In real jeopardy this does not happen, only the winner of the round gets to keep the money
+It hash been 1 hour of work
+
 4/23 1PM
 Added method that can creates a menu and handle user input. I also added comments to explain all the does
 It has been 2 hours of work
