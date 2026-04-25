@@ -1,3 +1,11 @@
+4/25 1PM
+I added a new variable within the round method to keep track of the players scores in the round. Once the round is over the player that 
+solved the puzzle will have the money from the current round added to their final score. I had to change some other parts of the 
+code to implement this since I had to pass the new list holding the scores for the current round. ALso the game will play three rounds
+due to a loop added to main.py
+It has been 40 minutes of work
+
+
 4/23 2PM
 Added method to handle logic for user solving the phrase. The round will end once the players can solve the puzzle
 I need to add logic to track the points. Currently money earned in a round goes to the next round.

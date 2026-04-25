@@ -7,10 +7,11 @@ Wheel of fortune
     Handle user guess consonant  ✅
     Handle user buying a vowel   ✅
     Handle user guessing phrase  ✅
-    Keep track of scores during round
+    Keep track of scores during round ✅
     Maybe add skip turn and stuff
 5. Add loop to ask users if they wish to keep playing 
 6. Add feature to play alone?
 7. Clean up code and make output nicer
-8. Make another variable to store money for current round then at end at to their total
+8. Make another variable to store money for current round then at end at to their total ✅
 9. Make a method to show a menu with options and handle user entering valid options  ✅
+10. Add method to determine the winner of the game
