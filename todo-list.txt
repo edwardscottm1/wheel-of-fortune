@@ -14,4 +14,5 @@ Wheel of fortune
 7. Clean up code and make output nicer
 8. Make another variable to store money for current round then at end at to their total ✅
 9. Make a method to show a menu with options and handle user entering valid options  ✅
-10. Add method to determine the winner of the game
+10. Add method to determine the winner of the game ✅
+11. bug test

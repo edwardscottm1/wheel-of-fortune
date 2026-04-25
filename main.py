@@ -5,15 +5,17 @@ import wheelOFfortune
 NUM_OF_ROUNDS = 3
 
 def main():
-    WheelOFfortune = wheelOFfortune.wheelOfFortuneGame()
-    # WheelOFfortune.printGameRules()
-    # WheelOFfortune.getPlayerNames()
-    WheelOFfortune.getLengthOfPhraseFile()
+    WheelOfFortune = wheelOFfortune.wheelOfFortuneGame()
+    WheelOfFortune.printGameRules()
+    WheelOfFortune.getPlayerNames()
+    WheelOfFortune.getLengthOfPhraseFile()
     for i in range(NUM_OF_ROUNDS):
-        WheelOFfortune.getPhraseForRound()
-        WheelOFfortune.playRound()
+        WheelOfFortune.getPhraseForRound()
+        WheelOfFortune.playRound()
         if i < NUM_OF_ROUNDS - 1:
             print('\nLet\'s play our next round!\n\n')
+    WheelOfFortune.determineWinner()
+    WheelOfFortune.farewell()
 
 if __name__ == '__main__':
     main()

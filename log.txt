@@ -1,3 +1,8 @@
+4/25 5:30pm
+I added a new method that is called to determine the winner after three rounds of play.
+Also made a method to show a farewell message to the players. I did some playing of the game and noticed some bugs I need to fixed.
+It has been 2 hours of work.
+
 4/25 1PM
 I added a new variable within the round method to keep track of the players scores in the round. Once the round is over the player that 
 solved the puzzle will have the money from the current round added to their final score. I had to change some other parts of the 
