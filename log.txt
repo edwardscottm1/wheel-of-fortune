@@ -1,4 +1,14 @@
-4/25 5:30pm
+4/25 6:50PM
+I added lose your turn and bankrupt now to the wheel. This adds more strategy to the game,
+I am also working on making a new spin wheel animation
+It has been 1 hour of work
+
+4/25 5:45PM
+Fixed the bug in the code. Now I want to add some fun stuff for the game. I want to improve my wheel spin,
+add lose turn or bankrupt.
+It has been 15 minutes of work
+
+4/25 5:30PM
 I added a new method that is called to determine the winner after three rounds of play.
 Also made a method to show a farewell message to the players. I did some playing of the game and noticed some bugs I need to fixed.
 It has been 2 hours of work.
