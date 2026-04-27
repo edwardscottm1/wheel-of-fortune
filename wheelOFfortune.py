@@ -1,21 +1,31 @@
 '''This file will contain the class used to play the wheel of fortune game'''
-# 3 hours
-
+# Import needed modules
 import random
 import time
 
+# Class used for wheel of fortune logic
 class wheelOfFortuneGame:
+    # Create needed constants
     INPUT_FIELD = '>> ' 
     BORDER_LENGTH = 100
+    # The time module has a function to stop program flow (sleep), I used this to allow players to read the output
+    # in the console then have the next part of the game print
+    # Without this module it would be hard for players to keep track of what is happening
+    SHORT_PAUSE = 1
+    MEDIUM_PAUSE = 2
+    LONG_PAUSE = 4
+
+    # Constants for letters
     VOWELS = ('A', 'E', 'U', 'I', 'O')
     CONSONANTS = ('Q', 'W', 'R', 'T', 'Y', 'P', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M')
+    
     # Initialise needed attributes
     def __init__(self):
         
-        self.__phraseForRound = {'category': '', 'phrase': []}
-        self.__phraseAsBlankChars = []
-        # ['■' * len(word) for word in self.__phraseForRound['phrase']]
-        self.__vowelsInPhrase = []
+        self.__puzzleForRound = {'category': '', 'text': []}
+        self.__puzzleAsBlankChars = []
+        # ['■' * len(word) for word in self.__puzzleForRound['text']]
+        self.__vowelsInPuzzle = []
         self.__vowelsRevealed = False
         self.__scores = [ # placeholder values THIS NEED TO BE SET TO NOTHING WHEN DONE
             {'user':'Edward', 'money': 0},
@@ -33,6 +43,7 @@ class wheelOfFortuneGame:
     
     # Method used to get names of players
     def getPlayerNames(self):
+        print('\nLet\'s see who will be playing Wheel of Fortune Tonight!\n')
         print('Please enter the names for the players playing')
         for i in range(3):
             # Ensure user enters a name, not just a space
@@ -48,46 +59,46 @@ class wheelOfFortuneGame:
             
         print('\nOkay contestants, let\'s play our first round')
     
-    # Method used to get length of phrases file, this is done to allow users to add more phrases to the file (if they want to) 
+    # Method used to get length of puzzles file, this is done to allow users to add more puzzles to the file (if they want to) 
     # and have program not crash
-    def getLengthOfPhraseFile(self):
-        with open('phrases.txt', 'r') as phrasesFile:
+    def getLengthOfPuzzleFile(self):
+        with open('puzzles.txt', 'r') as puzzlesFile:
             # List comprehension, we go over each line in the file and get a value of 1, to get the 
             # number of lines in the file
-            self.__numberOfLines = sum([1 for line in phrasesFile])
+            self.__numberOfLines = sum([1 for line in puzzlesFile])
                     
-    # Method used to get a random phrase from the phrases file
-    def getPhraseForRound(self):
+    # Method used to get a random puzzle from the puzzles file
+    def getPuzzleForRound(self):
         # Get a random integer, this will be the random line in the file
         randomLine = random.randint(1, self.__numberOfLines)
         
-        # Variable to store phrase 
-        phrase = ''
+        # Variable to store puzzle 
+        puzzle = ''
         # Read the file 
-        with open('phrases.txt', 'r') as phrasesFile:
+        with open('puzzles.txt', 'r') as puzzlesFile:
             for i in range(randomLine):
-                phrase = phrasesFile.readline()
-            # Once phrase found, split it to category and phrase
-            phrase = phrase.rstrip('\n').split('-')
+                puzzle = puzzlesFile.readline()
+            # Once puzzle found, split it to category and puzzle
+            puzzle = puzzle.rstrip('\n').split('-')
             
 
         # Save to the appropriate attributes
-        self.__phraseForRound['category'] = phrase[0]
-        self.__phraseForRound['phrase'] = phrase[1].upper()
+        self.__puzzleForRound['category'] = puzzle[0]
+        self.__puzzleForRound['text'] = puzzle[1].upper()
 
-        # Make a version of the phrase as blank characters to show to players during the game    
+        # Make a version of the puzzle as blank characters to show to players during the game    
         # Each word becomes a row of equal signs 
-        self.__phraseAsBlankChars = ['=' * len(word) for word in self.__phraseForRound['phrase'].split()]
+        self.__puzzleAsBlankChars = ['=' * len(word) for word in self.__puzzleForRound['text'].split()]
 
-        # This is used to keep track of vowels in the phrase. 
+        # This is used to keep track of vowels in the puzzle. 
         # Used to check when players bought every vowel
         # First we clear the attribute in case any vowels were left over from previous rounds
-        self.__vowelsInPhrase.clear()
+        self.__vowelsInPuzzle.clear()
         # Then we loop through the vowels in the VOWELS constant tuple
         for vowel in self.VOWELS:
-            # If the word contains the vowel, we append the vowel to the __vowelsInPhrase attribute
-            if vowel in self.__phraseForRound['phrase']:
-                self.__vowelsInPhrase.append(vowel)
+            # If the word contains the vowel, we append the vowel to the __vowelsInPuzzle attribute
+            if vowel in self.__puzzleForRound['text']:
+                self.__vowelsInPuzzle.append(vowel)
 
     # Method used to print the scores from each player
     def displayScores(self, scores, title):
@@ -110,10 +121,12 @@ class wheelOfFortuneGame:
     def spinWheel(self, values):
         # Constant for how many times we loop over the wheel
         NUM_OF_CYCLES = 2
+        SHORT_PAUSE = .08
+        LONG_PAUSE = .3
 
         # This determines which value the user lands on the wheel
         # The index to stop the "spin"
-        endingIndex = random.randint(0, len(values))
+        endingIndex = random.randint(1, len(values))
 
         # Variable used to return the value the user landed on
         landedValue = None
@@ -122,11 +135,11 @@ class wheelOfFortuneGame:
         for i in range(NUM_OF_CYCLES):
                 for i in range(len(values)):
                     print(f'--{values[i]:^16}--', end = '\r')
-                    time.sleep(.08)
+                    time.sleep(SHORT_PAUSE)
         # After "two cycles of the wheel" it slows down to a value determined by the endingIndex
         for i in range(endingIndex):
             print(f'--{values[i]:^16}--', end = '\r')
-            time.sleep(.3)
+            time.sleep(LONG_PAUSE)
             # Save the landed value
             landedValue = values[i]
         print()
@@ -136,10 +149,10 @@ class wheelOfFortuneGame:
     # Method used to play a round of wheel of fortune 
     def playRound(self):
         # Print a introductory message
-        print(f'The category for this round is: {self.__phraseForRound['category']}')
-        time.sleep(2)
+        print(f'The category for this round is: {self.__puzzleForRound['category']}')
+        time.sleep(self.MEDIUM_PAUSE)
 
-        # Generate the values for the wheel
+        # Generate the values for the wheel for this round
         self.generateValuesForWheel()
         self.printListInLine(self.__wheelValues, 'The values on the wheel are')
 
@@ -150,34 +163,36 @@ class wheelOfFortuneGame:
             {'user': self.__scores[2]['user'], 'money': 0},
         ]
 
-        # Sentinel variable used to keep round going till the phrase is solved
-        phraseSolved = False
+        # Sentinel variable used to keep round going till the puzzle is solved
+        puzzleSolved = False
+
         # Create sets to store consonant and vowels guessed/purchased
         guessedConsonants = set()
         purchasedVowels = set()
         self.__vowelsRevealed = False
-        # Loop to play game, each player takes turn to spin wheel and guess the letters of the phrase
-        while not phraseSolved:
+        # Loop to play game, each player takes turn to spin wheel and guess the letters of the puzzle
+        while not puzzleSolved:
             
-            # Loop through __scores object, to let each player play
+            # Loop through scoresCurrentRound list, to let each player play
             for player in range(len(scoresCurrentRound)):
                 # Sentinel variable used to keep track if a player's turn is over
-                # It ends when they guess a consonant, vowel or the phrase wrong
+                # It ends when they guess a consonant, vowel or the puzzle wrong or when they land on lose turn or bankrupt
                 turnOver = False
                 while not turnOver:
                     # At start of each turn print the money each player has
                     self.displayScores(scoresCurrentRound, 'Current Scores:')
-                    # Show the current phrase as blank characters, to user
+                    
+                    # Show the current puzzle as blank characters, to user
                     # This gets filled in with letters as the players guess the letters
-                    print('\nHere is your phrase')
-                    print(' '.join(self.__phraseAsBlankChars))
+                    print('\nHere is your puzzle')
+                    print(' '.join(self.__puzzleAsBlankChars))
                     
                     # Show the guessed consonants and bought vowels
                     self.printListInLine(guessedConsonants, 'Guessed Consonants')
                     self.printListInLine(purchasedVowels, 'Purchased Vowels')
                     
                     # Let user spin the wheel
-                    print(f'\n{scoresCurrentRound[player]['user']} it is your turn, press enter to spin the wheel!')
+                    print(f'\n{scoresCurrentRound[player]['user']} it is your turn, press "enter" to spin the wheel!')
                     input(self.INPUT_FIELD)
                     landedValue = self.spinWheel(self.__wheelValues)
                     
@@ -187,26 +202,26 @@ class wheelOfFortuneGame:
                         print('Whoops, you lost all your money and your turn!\n')
                         scoresCurrentRound[player]['money'] = 0
                         turnOver = True
-                        time.sleep(2)
+                        time.sleep(self.MEDIUM_PAUSE)
                         continue
                     # If user lands on LOSE YOUR TURN, their turn ends
                     elif landedValue == 'LOSE YOUR TURN':
                         print('\nYou landed on LOSE YOUR TURN')
                         print('Whoops, you lost your turn!\n')
                         turnOver = True
-                        time.sleep(2)
+                        time.sleep(self.MEDIUM_PAUSE)
                         continue
                     else:
                         # Inform user what they landed on 
                         print(f'\nYou landed on ${landedValue}\n')
-                        time.sleep(2)
+                        time.sleep(self.MEDIUM_PAUSE)
                     
                     # Ask user on what they would like to do
                     # If all the vowels have been revealed, we remove the vowel option
                     if self.__vowelsRevealed == False:
-                        userInput = self.handleMenuSelection(['Guess consonant', 'Solve the phrase', 'Buy a vowel'])
+                        userInput = self.handleMenuSelection(['Guess consonant', 'Solve the puzzle', 'Buy a vowel'])
                     else:
-                        userInput = self.handleMenuSelection(['Guess consonant', 'Solve the phrase'])
+                        userInput = self.handleMenuSelection(['Guess consonant', 'Solve the puzzle'])
 
                     # Call the appropriate method based on user input
                     # The turnOver variable will gets a new boolean value to determine if the players
@@ -216,78 +231,81 @@ class wheelOfFortuneGame:
                     elif userInput == 2:
                         # If solved we set the sentinel variables to their appropriate values to exit the loop
                         # and store which player solved the puzzle
-                        turnOver, phraseSolved, player = self.playerSolvePhrase(player)
+                        turnOver, puzzleSolved, player = self.playerSolvePuzzle(player)
                     elif userInput == 3:
-                        turnOver = self.playerBuysVowel(landedValue, purchasedVowels, guessedConsonants, player, scoresCurrentRound)
+                        turnOver = self.playerBuysVowel(purchasedVowels, player, scoresCurrentRound)
+                        
+                        # After buying vowels, the user can either guess a consonant or solve the puzzle
+                        userInput = self.handleMenuSelection(['Guess a consonant', 'Solve the puzzle'])
+                        if userInput == 1:
+                            turnOver = self.playerGuessesConsonant(landedValue, guessedConsonants, player, scoresCurrentRound)
+                        elif userInput == 2:
+                            turnOver, puzzleSolved, player = self.playerSolvePuzzle(player)
                 
-                # When phrase is solved, we break out of the game loop        
-                if phraseSolved: 
+                # When puzzle is solved, we break out of the game loop        
+                if puzzleSolved: 
                     break
         # After puzzle solved inform players and add the money earned for the player that solved the puzzle
         print('\nRound over')
         print(f'Great job {scoresCurrentRound[player]['user']}! The money earned from this round will be added to your total.')
         self.__scores[player]['money'] += scoresCurrentRound[player]['money']
         self.displayScores(self.__scores, 'Scores after the puzzle:')
-        time.sleep(4)
+        time.sleep(self.LONG_PAUSE)               
 
-        
-                       
-
-    # Method used to handle user wanting to guess a consonant in the phrase
+    # Method used to handle user wanting to guess a consonant in the puzzle
     def playerGuessesConsonant(self, landedValue, guessedConsonants, player, scores):
-        # Print the phrase and the guesses consonants
-        print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
+        # Print the puzzle and the guessed consonants
+        print(f'\nPuzzle:\n{' '.join(self.__puzzleAsBlankChars)}')
         self.printListInLine(guessedConsonants, 'Guessed Consonants')
         
         # Ask user to enter a consonant
         validInput = False
         while not validInput:
-            userInput = input(f'\nGuess a consonant in the phrase\n{self.INPUT_FIELD}').upper().rstrip()
-            # Check to see if user entered nothing, if not they are prompted to enter a letter again
-            if userInput in self.VOWELS or userInput ==' ' or userInput == '' or userInput not in self.CONSONANTS:
+            userInput = input(f'\nGuess a consonant in the puzzle\n{self.INPUT_FIELD}').upper().rstrip()
+            # Check to see if user entered a consonant, if not they will be asked to enter a letter again
+            if userInput in self.VOWELS or userInput not in self.CONSONANTS or userInput ==' ' or userInput == '':
                 validInput = False
                 print('Please enter a consonant')
                 continue
             validInput = True
         else:
-            # We need to check that they entered a character that, if it is their turn ends
+            # We need to check that they entered a character that has already been guessed, if it is their turn ends
             if userInput in guessedConsonants:
                 print(f'\nSorry, "{userInput}" was already guessed, you turn has ended.')
-                
-                time.sleep(1)
+                time.sleep(self.SHORT_PAUSE)
                 return True
 
-        # Keep track of constants guessed
+        # Once user enters a consonant, we keep track of constants guessed
         guessedConsonants.add(userInput)
 
-        # Check to see how many instances of the user entered consonant is in the phrase
-        num = self.checkForCharInPhrase(self.__phraseForRound['phrase'], userInput)
+        # Check to see how many instances of the user entered consonant is in the puzzle
+        num = self.checkForCharInPuzzle(self.__puzzleForRound['text'], userInput)
         
         # Based on the number of instances of the consonant, print an appropriate message
-        # If the consonant is in the phrase, we need to update the list that stores the phrase
+        # If the consonant is in the puzzle, we need to update the list that stores the puzzle
         # with blank characters
         if num > 1:
-            print(f'\nThere are {num} {userInput}s!')
+            print(f'\nThere are {num} "{userInput}"s!')
             self.replaceBlankStrWithChars(userInput)
         elif num == 1:
-            print(f'\nThere is 1 {userInput}')
+            print(f'\nThere is 1 "{userInput}"')
             self.replaceBlankStrWithChars(userInput)
         else:
             # When player does not get any characters correct, their turn ends
-            print(f'\nSorry there are no "{userInput}" in the phrase. Next players turn.')
-            time.sleep(1)
+            print(f'\nSorry there are no "{userInput}" in the puzzle. Next players turn.')
+            time.sleep(self.SHORT_PAUSE)
             return True
             
         # Add user score
         # This depends on the number of instance of the letter times the number the user landed on with the wheel
         print(f'Money earned: {num * landedValue}')
         scores[player]['money'] += num * landedValue
-        time.sleep(1)
+        time.sleep(self.SHORT_PAUSE)
         # Return false to allow user to spin again since they guesses correctly
         return False
 
     # Method used to allow user to purchase a vowel
-    def playerBuysVowel(self, landedValue, purchasedVowels, guessedConsonants, player, scores):
+    def playerBuysVowel(self, purchasedVowels, player, scores):
         # Cost of a vowel
         VOWEL_COST = 250
 
@@ -295,18 +313,16 @@ class wheelOfFortuneGame:
         # Loop till user does not want to buy another vowel, or they cannot buy another one
         buyAnother = 'Y'
         while buyAnother == 'Y':
-            print(self.__vowelsInPhrase)
-            print(self.__phraseForRound['phrase'])
             # Print user their balance and the cost of a vowel
             print(f'\nYour balance: {scores[player]['money']}\t\t Cost of vowel: {VOWEL_COST}')
             # First check if user has enough money to buy a vowel
             if scores[player]['money'] <= VOWEL_COST:
                 print('Sorry, you don\'t have enough money to buy a vowel\n')
-                time.sleep(1)
+                time.sleep(self.SHORT_PAUSE)
                 break # stop the loop
 
-            # Print the phrase with blank characters and the purchases vowels
-            print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
+            # Print the puzzle with blank characters and the purchases vowels
+            print(f'\nPuzzle:\n{' '.join(self.__puzzleAsBlankChars)}')
             self.printListInLine(purchasedVowels, 'Purchased Vowels')
 
             # Ask user to enter a vowel
@@ -316,7 +332,7 @@ class wheelOfFortuneGame:
                 userInput = input(f'\nWhich vowel would you like to buy?\n{self.INPUT_FIELD}').upper().rstrip()
                 # Check if user entered nothing or if they entered a consonant
                 # If so the user needs to enter a vowel to continue
-                if userInput in self.CONSONANTS or userInput == ' ' or userInput == '':
+                if userInput not in self.VOWELS or userInput in self.CONSONANTS or userInput == ' ' or userInput == '':
                     validInput = False
                     print('Please buy a vowel!\n')
                     continue
@@ -327,7 +343,7 @@ class wheelOfFortuneGame:
                 # If it was, their turn is over
                 if userInput in purchasedVowels:
                     print(f'\nSorry, "{userInput}" was already purchases, you turn has ended.\n')
-                    time.sleep(1)
+                    time.sleep(self.SHORT_PAUSE)
                     return True
             
 
@@ -337,104 +353,98 @@ class wheelOfFortuneGame:
             # Subtract cost of vowel to player's balance
             scores[player]['money'] -= VOWEL_COST 
 
-            # Check to see how many of the purchased vowel are in the phrase
-            num = self.checkForCharInPhrase(self.__phraseForRound['phrase'], userInput)
+            # Check to see how many of the purchased vowel are in the puzzle
+            num = self.checkForCharInPuzzle(self.__puzzleForRound['text'], userInput)
             
-            # Display appropriate message based on number of vowels in the phrase
+            # Display appropriate message based on number of vowels in the puzzle
             if num == 0:
-                print(f'Sorry there is no "{userInput}" in the phrase. Your turn ends\n')
-                time.sleep(1)
-                # Exit the function, when player buys a vowel not in the phrase, their turn ends
+                print(f'Sorry there is no "{userInput}" in the puzzle. Your turn ends\n')
+                time.sleep(self.SHORT_PAUSE)
+                # Exit the function, when player buys a vowel not in the puzzle, their turn ends
                 return True
             elif num > 1: 
-                print(f'\nThere are {num} "{userInput}" in the phrase')
+                print(f'\nThere are {num} "{userInput}"s in the puzzle')
                 self.replaceBlankStrWithChars(userInput)
-                print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
-                time.sleep(1)
+                print(f'\nPuzzle:\n{' '.join(self.__puzzleAsBlankChars)}')
+                time.sleep(self.SHORT_PAUSE)
             else: 
-                print(f'\nThere is 1 "{userInput}" in the phrase')
+                print(f'\nThere is 1 "{userInput}" in the puzzle')
                 self.replaceBlankStrWithChars(userInput)
-                print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
-                time.sleep(1)
+                print(f'\nPuzzle:\n{' '.join(self.__puzzleAsBlankChars)}')
+                time.sleep(self.SHORT_PAUSE)
 
             # We remove the vowel from this list to keep track of vowels not revealed yet
-            self.__vowelsInPhrase.remove(userInput)
-            # print(self.__vowelsInPhrase)
+            self.__vowelsInPuzzle.remove(userInput)
+            
             # Once all the vowels have been bought, we inform players of it
-            if len(self.__vowelsInPhrase) == 0:
+            if len(self.__vowelsInPuzzle) == 0:
                 print('No more vowels left to buy!\n')
                 self.__vowelsRevealed = True
-                time.sleep(1)
-                break
+                time.sleep(self.SHORT_PAUSE)
+                break # Exit loop to allow player to guess consonant or solve puzzle
 
             # Ask user if they would like to buy another vowel
             print(f'\nYour balance: {scores[player]['money']}')
             buyAnother = input(f'\nWould you like to buy another vowel? (Y?)\n{self.INPUT_FIELD}').upper()
             print()
 
-        # Once user does not want to buy another vowel or no more vowels available to buy, they can either guess a consonant or the phrase
-        # Ensure input is valid
-        userInput = self.handleMenuSelection(['Guess a consonant', 'Solve the phrase'])
-        if userInput == 1:
-            return self.playerGuessesConsonant(landedValue, guessedConsonants, player, scores)
-        elif userInput == 2:
-            pass
+        
+        # We exit this method once user can't or won't buy another vowel
+        return False
     
-    # Method used to handle players solving the phrase
-    def playerSolvePhrase(self, player):
-        # Show the partially solved phrase and prompt user for guess
-        print(f'\nPhrase:\n{' '.join(self.__phraseAsBlankChars)}')
-        print('\nType the puzzle word for word')
+    # Method used to handle players solving the puzzle
+    def playerSolvePuzzle(self, player):
+        # Show the partially solved puzzle and prompt user for guess
+        print(f'\nPuzzle:\n{' '.join(self.__puzzleAsBlankChars)}')
+        print('\nType the puzzle word for word (no extra spaces please!):')
         userInput = input(self.INPUT_FIELD).rstrip().upper()
 
-        if userInput == self.__phraseForRound['phrase']:
+        if userInput == self.__puzzleForRound['text']:
             # If guess correct, inform players, return boolean values to exit loop and player who solved it 
-            print(f'Correct! the phrase was: {self.__phraseForRound['phrase']}')
-            time.sleep(1)
+            print(f'Correct! the puzzle was: {self.__puzzleForRound['text']}')
+            time.sleep(self.SHORT_PAUSE)
             return True, True, player
         else:
             # If guess incorrect, current players turn is over
             print('Wrong, next players turn!')
-            time.sleep(1)
+            time.sleep(self.SHORT_PAUSE)
             return True, False, None
             
-    # Method used to check if a character entered by the player is in the phrase
-    # It returns an int of how many instances of the character is in the phrase
-    def checkForCharInPhrase(self, phrase, char):
+    # Method used to check if a character entered by the player is in the puzzle
+    # It returns an int of how many instances of the character is in the puzzle
+    def checkForCharInPuzzle(self, puzzle, char):
         num = 0
-        for word in phrase:
+        for word in puzzle:
             num += word.count(char)
         return num
         
-    # Method used to replace blank characters in phrase to correct guessed/purchases characters
+    # Method used to replace blank characters in puzzle to correct guessed/purchases characters
     def replaceBlankStrWithChars(self, userInput):
-        # Variable used to keep track of the words index in the __phraseAsBlankChars list
+        # Variable used to keep track of the words index in the __puzzleAsBlankChars list
         wordIndex = 0
     
-        # Loop through each word in the phrase for the round
-        for word in self.__phraseForRound['phrase'].split():
+        # Loop through each word in the puzzle for the round
+        for word in self.__puzzleForRound['text'].split():
             # Variable used to keep track of the current characters index
             charIndex = 0
             # Loop through every character in the word
             for char in word:                
-                
-                # If the character equals the character the user entered, we replace the blank character in __phraseAsBlankChars
+                # If the character equals the character the user entered, we replace the blank character in __puzzleAsBlankChars
                 # with the appropriate letter
                 if char == userInput:    
                     # In order to replace the character, we slice the string. 
                     # First we slice the string from the start to the character before the one that needs to be replaced
                     # Then we concatenate the letter the user entered to the first slice
                     # Then slice the original string to get the rest of the string and concatenate it to the previous strings
-                    self.__phraseAsBlankChars[wordIndex] = self.__phraseAsBlankChars[wordIndex][:charIndex] + userInput + self.__phraseAsBlankChars[wordIndex][charIndex + 1:]
+                    self.__puzzleAsBlankChars[wordIndex] = self.__puzzleAsBlankChars[wordIndex][:charIndex] + userInput + self.__puzzleAsBlankChars[wordIndex][charIndex + 1:]
                 
-                # Increment the variable
+                # Increment the variables
                 charIndex += 1
             wordIndex += 1
 
-    # Method used to print a list/set in a row
+    # Method used to print a list/set in a row with a title
     def printListInLine(self, items, title):
             print(f'\n{title}:')
-
             count = 0
             for item in items:
                 if count < len(items) - 1:
@@ -489,13 +499,13 @@ class wheelOfFortuneGame:
                     tiedPlayers.append(winner)
         
         # Print message to inform users of game ending
-        print('Let\'s see the finals scores to determine our winner')
-        time.sleep(1)
+        print('Let\'s see the final scores to determine our winner')
+        time.sleep(self.SHORT_PAUSE)
 
         # Print final scores
         self.displayScores(self.__scores, 'Final Scores:')
         print()
-        time.sleep(1)
+        time.sleep(self.SHORT_PAUSE)
         
         # If there is a tie, inform players of it
         if len(tiedPlayers) > 0:
@@ -504,9 +514,9 @@ class wheelOfFortuneGame:
         else:
             # Congratulate winner
             print(f'Congrats {winner} you won ${highestScore:.2f}')
-        time.sleep(1)
+        time.sleep(self.MEDIUM_PAUSE)
             
-    # Method used to say goodbye and thank you to the players
+    # Method used to say goodbye and thank you to the players after playing 3 rounds
     def farewell(self):
         print('\n\nThank you for your time and for playing Wheel of Fortune!')
         print('I hope you can join us again next night for another show.')

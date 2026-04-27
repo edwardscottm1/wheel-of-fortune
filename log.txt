@@ -1,3 +1,9 @@
+4/27 1:24PM
+I added more comments to the code, added some variables/constants, and changed phrase to puzzle. I fixed a minor bug I found.
+My next step is now to finish up this project. I would like to add a final round like in Wheel of Fortune but I'm not sure
+if I feel like doing it.
+It has been 1 hour of work
+
 4/27 11:30AM
 Created a new animation for the wheel spin. Now it shows the user the values as the wheel spins and
 slows down when approaching the landed value. I think now I want to start adding more phrases,
