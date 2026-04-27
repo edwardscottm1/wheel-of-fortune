@@ -103,25 +103,34 @@ class wheelOfFortuneGame:
     def generateValuesForWheel(self):
         self.__wheelValues = random.choices(range(500, 1500, 100), k = 8)
         # In wheel of fortune there are wedges on the wheel to make players lose their turn or all their money
-        self.__wheelValues.append('BANKRUPT')
-        self.__wheelValues.append('LOSE YOUR TURN')
+        self.__wheelValues.insert(random.randint(0, len(self.__wheelValues)), 'BANKRUPT')
+        self.__wheelValues.insert(random.randint(0, len(self.__wheelValues)), 'LOSE YOUR TURN')
 
-    # Method used to spin the wheel, takes a list of values
+    # Method used to spin the wheel, takes a list of values that are on the wheel
     def spinWheel(self, values):
-        # From the passes list, we randomly choose one
-        landedValue = random.choice(values)
+        # Constant for how many times we loop over the wheel
+        NUM_OF_CYCLES = 2
 
-        # Characters for animation for spinning wheel
-        spinWheelChars = ['|', '/', '-', '\\', '|', '/', '-', '\\']
+        # This determines which value the user lands on the wheel
+        # The index to stop the "spin"
+        endingIndex = random.randint(0, len(values))
 
-        # This loop is used to show the animation of a wheel spinning
-        for i in range (2):
-            for k in range (len(spinWheelChars)):
-                # Pause execution to allow user to see characters changing
-                time.sleep(.1)
-                print('Spinning wheel', spinWheelChars[k], end='\r')
+        # Variable used to return the value the user landed on
+        landedValue = None
+        
+        # Loop used to loop over the list of values and show it like a spinning wheel almost
+        for i in range(NUM_OF_CYCLES):
+                for i in range(len(values)):
+                    print(f'--{values[i]:^16}--', end = '\r')
+                    time.sleep(.08)
+        # After "two cycles of the wheel" it slows down to a value determined by the endingIndex
+        for i in range(endingIndex):
+            print(f'--{values[i]:^16}--', end = '\r')
+            time.sleep(.3)
+            # Save the landed value
+            landedValue = values[i]
         print()
-        # Return the value that the wheel landed on
+                
         return landedValue
 
     # Method used to play a round of wheel of fortune 
@@ -190,6 +199,7 @@ class wheelOfFortuneGame:
                     else:
                         # Inform user what they landed on 
                         print(f'\nYou landed on ${landedValue}\n')
+                        time.sleep(2)
                     
                     # Ask user on what they would like to do
                     # If all the vowels have been revealed, we remove the vowel option
@@ -422,11 +432,19 @@ class wheelOfFortuneGame:
             wordIndex += 1
 
     # Method used to print a list/set in a row
-    def printListInLine(self, list, title):
+    def printListInLine(self, items, title):
             print(f'\n{title}:')
-            for word in list:
-                print(f'{word}\t', end = '')
+
+            count = 0
+            for item in items:
+                if count < len(items) - 1:
+                    print(f'{item} | ', end = '')
+                else:
+                    print(item)
+
+                count += 1
             print()
+
 
     # Method that takes a list as an argument to generate a menu selection screen
     # This method handles invalid inputs also

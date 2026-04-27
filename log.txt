@@ -1,3 +1,10 @@
+4/27 11:30AM
+Created a new animation for the wheel spin. Now it shows the user the values as the wheel spins and
+slows down when approaching the landed value. I think now I want to start adding more phrases,
+see if I can improve any logic in the code, clean up the output and start doing the other necessary
+documents for this project.
+It has been 2 hours of work
+
 4/25 6:50PM
 I added lose your turn and bankrupt now to the wheel. This adds more strategy to the game,
 I am also working on making a new spin wheel animation
