@@ -1,3 +1,10 @@
+4/28 1:43PM
+I created a UML diagram, created a readMe file and added the rules/title to print for the program
+It has been 2 hours of work
+4/27 2:10PM
+I did some more bug fixing, the code should be good now.
+It has been 30 minutes of work
+
 4/27 1:24PM
 I added more comments to the code, added some variables/constants, and changed phrase to puzzle. I fixed a minor bug I found.
 My next step is now to finish up this project. I would like to add a final round like in Wheel of Fortune but I'm not sure
@@ -49,7 +56,7 @@ I added logic to handle players purchasing vowels. In the method getPhraseForRou
 This is later used to check if all the vowels have been revealed. I added some other comments and fixed some other logic I had.
 It has been 2.5 hours of work
 
-4/12 4:40 pm
+4/21 4:40 pm
 The game asks for the name of the users, gets a phrase from the phrases.txt, handle wheel spins, and handle guess for consonants
 I added logic for player to guess a consonant in the phrase. It adds the appropriate score and replaces the str that hold
 blank characters. 

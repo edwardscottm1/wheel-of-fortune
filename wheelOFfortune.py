@@ -1,4 +1,23 @@
-'''This file will contain the class used to play the wheel of fortune game'''
+"""
+Edward Scott 4/28/26
+
+This program is contains a class that is used to play a round of wheel of fortune. 
+It has methods to get each player's name, get a puzzle for a round, generate a wheel with values,
+spin the wheel, play a round of wheel of fortune and other methods used to handle the game logic.
+This project was hard, it took me lots of try and error to figure out how to tackle certain problems.
+I had fun making this project and hope you enjoy using it!
+
+I spent about 20 hours on this code.
+
+Honor Code statement:
+I pledge that this program represents my own work. I received help from the python documentation, used the
+wheel of fortune website to fact check the rules: https://www.wheeloffortunelive.com/rules,
+used this website to get the puzzles:  https://wheeloffortuneanswer.com/#google_vignette,
+and used w3schools to lookup and understand some functions that I could use in my program
+https://www.w3schools.com/python/default.asp
+
+"""
+
 # Import needed modules
 import random
 import time
@@ -24,7 +43,6 @@ class wheelOfFortuneGame:
         
         self.__puzzleForRound = {'category': '', 'text': []}
         self.__puzzleAsBlankChars = []
-        # ['■' * len(word) for word in self.__puzzleForRound['text']]
         self.__vowelsInPuzzle = []
         self.__vowelsRevealed = False
         self.__scores = [ # placeholder values THIS NEED TO BE SET TO NOTHING WHEN DONE
@@ -37,13 +55,68 @@ class wheelOfFortuneGame:
 
     # Method used to print the game rules and title, NOT COMPLETE
     def printGameRules(self):
-        print('=' * self.BORDER_LENGTH)
-        print('Wheel of Fortune'.center(self.BORDER_LENGTH))
-        print('=' * self.BORDER_LENGTH)
+        # print('=' * self.BORDER_LENGTH)
+        # print('Wheel of Fortune'.center(self.BORDER_LENGTH))
+        # print('=' * self.BORDER_LENGTH)
+        print()
+        print(" ■           ■  ■       ■  ■ ■ ■ ■  ■ ■ ■ ■  ■          ■ ■ ■   ■ ■ ■ ■ ")
+        print("  ■         ■   ■       ■  ■        ■        ■         ■     ■  ■       ")
+        print("   ■   ■   ■    ■ ■ ■ ■ ■  ■ ■ ■ ■  ■ ■ ■ ■  ■         ■     ■  ■ ■ ■ ■ ")
+        print("    ■ ■ ■ ■     ■       ■  ■        ■        ■         ■     ■  ■       ")
+        print("     ■   ■      ■       ■  ■ ■ ■ ■  ■ ■ ■ ■  ■ ■ ■ ■    ■ ■ ■   ■       ")
+        print()
+        print("     ■ ■ ■ ■   ■ ■ ■   ■ ■ ■  ■ ■ ■ ■ ■  ■     ■  ■     ■  ■ ■ ■ ■")
+        print("     ■        ■     ■  ■    ■     ■      ■     ■  ■ ■   ■  ■      ")
+        print("     ■ ■ ■ ■  ■     ■  ■ ■ ■      ■      ■     ■  ■  ■  ■  ■ ■ ■ ■")
+        print("     ■        ■     ■  ■  ■       ■      ■     ■  ■   ■ ■  ■      ")
+        print("     ■         ■ ■ ■   ■   ■      ■       ■ ■ ■   ■     ■  ■ ■ ■ ■")
+        time.sleep(self.MEDIUM_PAUSE)
+        print('\nWelcome to tonights shows folks, I\'m your host Jim Thornton. If you are new to the show here are the rules:\n')
+            
+        print('\n1. A puzzle and category will be revealed to users, the puzzle will be a bunch of blank characters, as users ') 
+        print('\t\tguess the letters the puzzle will be revealed. The round ends once a user solves the puzzle.') 
+
+        print('\n2. Each player will have a grand total and sub total during the round,')
+        print('\t-- The total during the round is the money earned by guessing correct consonants. The user keeps this total if they solve ')
+        print('\t\tthe puzzle correct, then it will be added to their grand total') 
+        print('\t-- After 3 rounds of play, the grand total is used to determine the winner')
     
+        print('\n3. Each player will take turns spinning the wheel during the round,')        
+        print('\t-- Land on BANKRUPT, the player loses the money earned from the round and their turn ends')
+        print('\t-- Land on LOSE TURN, the player turn\'s end and the next player gets to spin the wheel')
+        print('\t-- Land on money, the player then can guess a consonant, buy a vowel, or solve the puzzle.') 
+        print('\t\tThis value is used to determine how much money they can earn')
+    
+        print('\n4. When a player guesses a consonant,')
+        print('\t-- The player will be prompted to enter a consonant they think is in the puzzle')
+        print('\t-- If the consonant is in puzzle, the consonant will be revealed in the puzzle, and the number of instance of') 
+        print('\t\tthe consonant in the puzzle times the landed value will equal how much money the user earns for that guess.') 
+        print('\t\tThe user then can spin the wheel again')
+        print('\t-- If the consonant is not in the puzzle, the player will lose their turn')
+        print('\t-- If the users guesses a consonant that was already guessed, the player will lose their turn')
+        
+        print('\n5. When a user buys a vowel,')
+        print('\t-- The user will be prompted to enter a vowel they wish to buy')
+        print('\t-- Each vowel cost $250, each time a player buys a vowel $250 will be subtracted from their total in the current round')
+        print('\t-- If the vowel is not in puzzle, if the vowel is not in the puzzle, the player\'s turn ends')
+        print('\t-- If the vowel is in the puzzle, the vowel will be shown in the puzzle, the player can buy another vowel if they wish,')
+        print('\t\tafter buying vowels the player can either guess a consonant or solve the puzzle')
+
+        print('\n6. When user wants to solve the puzzle,')
+        print('\t-- The player will be prompted to enter the puzzle correctly')
+        print('\t-- If entered correctly, the round ends and the money earned by the player that solves the puzzle will be added to their')
+        print('\t\tgrand total.')
+        print('\t-- If entered incorrectly, the player loses their turn and the next player spins the wheel')
+    
+        print('\n7. After 3 rounds of play a winner is determined,')
+        print('\t-- The player with the most amount of money earned will be the winner')
+        print('\t-- In the rare instance of a tie, the tied players will play rock paper scissors to determine the winner')
+        time.sleep(self.LONG_PAUSE)
+
+
     # Method used to get names of players
     def getPlayerNames(self):
-        print('\nLet\'s see who will be playing Wheel of Fortune Tonight!\n')
+        print('\nLet\'s see who will be playing Wheel of Fortune tonight!\n')
         print('Please enter the names for the players playing')
         for i in range(3):
             # Ensure user enters a name, not just a space
@@ -234,7 +307,8 @@ class wheelOfFortuneGame:
                         turnOver, puzzleSolved, player = self.playerSolvePuzzle(player)
                     elif userInput == 3:
                         turnOver = self.playerBuysVowel(purchasedVowels, player, scoresCurrentRound)
-                        
+                        if turnOver:
+                            continue
                         # After buying vowels, the user can either guess a consonant or solve the puzzle
                         userInput = self.handleMenuSelection(['Guess a consonant', 'Solve the puzzle'])
                         if userInput == 1:
@@ -263,7 +337,7 @@ class wheelOfFortuneGame:
         while not validInput:
             userInput = input(f'\nGuess a consonant in the puzzle\n{self.INPUT_FIELD}').upper().rstrip()
             # Check to see if user entered a consonant, if not they will be asked to enter a letter again
-            if userInput in self.VOWELS or userInput not in self.CONSONANTS or userInput ==' ' or userInput == '':
+            if userInput not in self.CONSONANTS:
                 validInput = False
                 print('Please enter a consonant')
                 continue
@@ -292,7 +366,7 @@ class wheelOfFortuneGame:
             self.replaceBlankStrWithChars(userInput)
         else:
             # When player does not get any characters correct, their turn ends
-            print(f'\nSorry there are no "{userInput}" in the puzzle. Next players turn.')
+            print(f'\nSorry there are no "{userInput}"s in the puzzle. Next players turn.')
             time.sleep(self.SHORT_PAUSE)
             return True
             
@@ -314,9 +388,9 @@ class wheelOfFortuneGame:
         buyAnother = 'Y'
         while buyAnother == 'Y':
             # Print user their balance and the cost of a vowel
-            print(f'\nYour balance: {scores[player]['money']}\t\t Cost of vowel: {VOWEL_COST}')
+            print(f'\nYour balance: ${scores[player]['money']:.2f}\t\t Cost of vowel: {VOWEL_COST}')
             # First check if user has enough money to buy a vowel
-            if scores[player]['money'] <= VOWEL_COST:
+            if scores[player]['money'] < VOWEL_COST:
                 print('Sorry, you don\'t have enough money to buy a vowel\n')
                 time.sleep(self.SHORT_PAUSE)
                 break # stop the loop
@@ -332,7 +406,7 @@ class wheelOfFortuneGame:
                 userInput = input(f'\nWhich vowel would you like to buy?\n{self.INPUT_FIELD}').upper().rstrip()
                 # Check if user entered nothing or if they entered a consonant
                 # If so the user needs to enter a vowel to continue
-                if userInput not in self.VOWELS or userInput in self.CONSONANTS or userInput == ' ' or userInput == '':
+                if userInput not in self.VOWELS:
                     validInput = False
                     print('Please buy a vowel!\n')
                     continue
@@ -358,7 +432,7 @@ class wheelOfFortuneGame:
             
             # Display appropriate message based on number of vowels in the puzzle
             if num == 0:
-                print(f'Sorry there is no "{userInput}" in the puzzle. Your turn ends\n')
+                print(f'Sorry there is no "{userInput}"s in the puzzle. Your turn ends\n')
                 time.sleep(self.SHORT_PAUSE)
                 # Exit the function, when player buys a vowel not in the puzzle, their turn ends
                 return True
@@ -384,7 +458,7 @@ class wheelOfFortuneGame:
                 break # Exit loop to allow player to guess consonant or solve puzzle
 
             # Ask user if they would like to buy another vowel
-            print(f'\nYour balance: {scores[player]['money']}')
+            print(f'\nYour balance: ${scores[player]['money']:.2f}')
             buyAnother = input(f'\nWould you like to buy another vowel? (Y?)\n{self.INPUT_FIELD}').upper()
             print()
 
@@ -413,10 +487,7 @@ class wheelOfFortuneGame:
     # Method used to check if a character entered by the player is in the puzzle
     # It returns an int of how many instances of the character is in the puzzle
     def checkForCharInPuzzle(self, puzzle, char):
-        num = 0
-        for word in puzzle:
-            num += word.count(char)
-        return num
+        return puzzle.count(char)
         
     # Method used to replace blank characters in puzzle to correct guessed/purchases characters
     def replaceBlankStrWithChars(self, userInput):
@@ -499,12 +570,7 @@ class wheelOfFortuneGame:
                     tiedPlayers.append(winner)
         
         # Print message to inform users of game ending
-        print('Let\'s see the final scores to determine our winner')
-        time.sleep(self.SHORT_PAUSE)
-
-        # Print final scores
-        self.displayScores(self.__scores, 'Final Scores:')
-        print()
+        print('\n\nLet\'s see the who is our winner')
         time.sleep(self.SHORT_PAUSE)
         
         # If there is a tie, inform players of it
@@ -513,9 +579,10 @@ class wheelOfFortuneGame:
             print('Play again to determine a winner or play rock papers scissors shoot!')
         else:
             # Congratulate winner
-            print(f'Congrats {winner} you won ${highestScore:.2f}')
+            print(f'Congrats {winner} you won ${highestScore:,}')
         time.sleep(self.MEDIUM_PAUSE)
             
+
     # Method used to say goodbye and thank you to the players after playing 3 rounds
     def farewell(self):
         print('\n\nThank you for your time and for playing Wheel of Fortune!')
