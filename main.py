@@ -1,5 +1,5 @@
 """
-Edward Scott 4/28/26
+Edward Scott 4/2/26
 
 This program is the main code that is used to simulate 3 rounds of wheel of fortune.
 It uses the class defined in wheelOfFortune.py file. This simulate 3 rounds, it does not has
@@ -23,7 +23,7 @@ https://www.w3schools.com/python/default.asp
 """
 
 # Import the module I created
-import wheelOfFortune
+import wheelOfFortuneModule
 
 # Constant that defines how many rounds will be played
 NUM_OF_ROUNDS = 3
@@ -31,7 +31,7 @@ NUM_OF_ROUNDS = 3
 # Main function
 def main():
     # Create a new instance of a class
-    WheelOfFortune = wheelOfFortune.wheelOfFortuneGame()
+    WheelOfFortune = wheelOfFortuneModule.wheelOfFortuneGame()
 
     # Call necessary methods to play wheel of fortune
     # Show rules to user, get contestants names

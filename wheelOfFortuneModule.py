@@ -70,8 +70,10 @@ class wheelOfFortuneGame:
         print("     ■ ■ ■ ■  ■     ■  ■ ■ ■      ■      ■     ■  ■  ■  ■  ■ ■ ■ ■")
         print("     ■        ■     ■  ■  ■       ■      ■     ■  ■   ■ ■  ■      ")
         print("     ■         ■ ■ ■   ■   ■      ■       ■ ■ ■   ■     ■  ■ ■ ■ ■")
+        
         time.sleep(self.MEDIUM_PAUSE)
-        print('\nWelcome to tonights shows folks, I\'m your host Jim Thornton. If you are new to the show here are the rules:\n')
+
+        print('\nWelcome to tonight\'s shows folks, I\'m your host Jim Thornton. If you are new to the show here are the rules:\n')
             
         print('\n1. A puzzle and category will be revealed to users, the puzzle will be a bunch of blank characters, as users ') 
         print('\t\tguess the letters the puzzle will be revealed. The round ends once a user solves the puzzle.') 

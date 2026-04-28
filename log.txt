@@ -1,6 +1,11 @@
+4/28 2:11PM
+Added more puzzles for the game and created pdf of output.
+It has been 30 minutes of work
+
 4/28 1:43PM
 I created a UML diagram, created a readMe file and added the rules/title to print for the program
 It has been 2 hours of work
+
 4/27 2:10PM
 I did some more bug fixing, the code should be good now.
 It has been 30 minutes of work
