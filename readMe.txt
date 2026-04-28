@@ -72,6 +72,7 @@ I wish that I could have done this project with someone else. Many times as I wa
 work so I can use one method with higher detail. Even though I didn't work with anyone, I challenged myself to learn a new tools that could
 help developing and sharing future projects. I learn how to use Git and Github. I created my own repository with this project and each time
 I made a change to the code I would commit and push it to the repo. Learning these tools showed me how I could use them in a pair programming
-environment, where I would update the code and push it to the repo so others can work on it/improve upon it.
+environment, where I would update the code and push it to the repo so others can work on it/improve upon it. I feel that now I have a 
+good baseline understanding of how to implement Git/version control for future project. 
 
-
+Here is a link to that repo: https://github.com/edwardscottm1/wheel-of-fortune
